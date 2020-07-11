@@ -27,10 +27,15 @@ end
 %% Initialize network
 
 dctblsz = [8 16 32];
-Imagesize = [256 256 3];
+nch = 1;
+Imagesize = [256 256 nch];
 
 % Network design: Compress using block-wise DCTs with different block sizes
-net = CNN_Tensor_init('Imagesize', Imagesize, 'dctblsz', dctblsz);
+net = CNN_Tensor_init('nch',nch,'Imagesize', Imagesize, 'dctblsz', dctblsz);
+
+%% RGB or luminance
+
+imdb.opts.nch = nch;
 
 %% Train
 

@@ -1,8 +1,17 @@
 function inputs = getBatch(imdb,batch)
 
-images = vl_imreadjpeg(imdb.inputs(batch),'Resize',imdb.opts.patchsize);
+images = vl_imreadjpeg(imdb.images.inputs(batch),'Resize',imdb.opts.patchsize);
 images = cat(4,images{:});
 images = images./255;
+% Gray scale
+if imdb.opts.nch == 1
+    % convert to ycbcr
+    for i = 1:size(images,4)
+        images(:,:,:,i) = rgb2ycbcr(images(:,:,:,i));
+    end
+    % Take y channel only
+    images = images(:,:,1,:);
+end
 labels = images;
 if opts.numGpus > 0
     images = gpuArray(images) ;

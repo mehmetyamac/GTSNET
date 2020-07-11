@@ -1,7 +1,7 @@
 %%
 
 % Change Matconvnet to your directory
-matconvnet = '..\..\Coded Aperture\matconvnet-master\matlab';
+matconvnet = '..\..\..\Coded Aperture\matconvnet-1.0-beta25\matlab';
 
 % Remove layers
 rmpath('myLayers');
@@ -18,7 +18,7 @@ imdb.opts = [];
 TrainData = './data/TrainingData/';
 ValData = './data/ValidateData/';
 
-fext = '*.png';
+fext = '*.jpeg';
 dtrain = dir([TrainData fext]);
 dval = dir([ValData fext]);
 train = {dtrain.name};
@@ -29,9 +29,9 @@ val = cellfun(@(d) fullfile(ValData,d), val, 'UniformOutput', false);
 set_train = ones(1,numel(dtrain),'single');
 set_val = 2*ones(1,numel(dval),'single');
 
-imdb.inputs = [train val];
-imdb.set = [set_train set_val];
+imdb.images.inputs = [train val];
+imdb.images.set = [set_train set_val];
 
 %% Train
 
-[net, info] = cnn_Tensor_Train_dag(imdb);
+[net, info] = CNN_Tensor_Train_dag(imdb);
