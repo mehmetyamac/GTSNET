@@ -11,6 +11,17 @@ run(fullfile(matconvnet, 'vl_setupnn.m'));
 addpath('myLayers');
 addpath('Tensor');
 
+%% Important parameters
+
+patchsize = [256 256]; % Patch size
+nch = 1; % Number of channels
+MR = 0.1; % Measurement rate
+dctblsz = [8 16 32]; % DCT block size
+
+batchSize = 32; % Batch size
+netdir = 'train/CNN_Tensor_RDN'; % Network directory
+learningRate = [logspace(-3,-3,50) logspace(-4,-4,30) logspace(-5,-5,20)]; % Learning Rate
+
 %% Create imdb
 
 imdb=struct;
@@ -34,16 +45,25 @@ imdb.images.set = [set_train set_val];
 
 %% Train
 
+% Options
 opts = struct();
-opts.expDir = 'train/CNN_Tensor_RDN';
-opts.batchSize = 32;
+opts.nch = nch;
+opts.patchsize = patchsize;
+opts.MR = MR;
+opts.dctblsz = dctblsz;
+opts.expDir = netdir;
+opts.batchSize = batchSize;
 opts.numSubBatches = 1;
-opts.learningRate = [logspace(-3,-3,50) logspace(-4,-4,30) logspace(-5,-5,20)];
+opts.learningRate = learningRate;
+% Number of epochs
 opts.numEpochs = numel(opts.learningRate);
+% Weight decay, momentum
 opts.weightDecay = 0.0001;
 opts.momentum = 0.5;
+% Solver
 opts.solver = @solver.adam; % []: SGD solver
 opts.gpus = [1]; % []: cpu
 opts.plotStatistics = true;
+
 
 [net, info] = CNN_Tensor_Train_dag(imdb,opts);
