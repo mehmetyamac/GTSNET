@@ -12,7 +12,7 @@ for c = 1:nch
     for i = 1:(imsz(c)/blsz(c))-1
         Tc = blkdiag(Tc,D);
     end
-    T{c} = Tc;
+    T{c} = single(Tc);
 end
 
 
