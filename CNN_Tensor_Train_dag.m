@@ -45,11 +45,14 @@ Imagesize = [opts.patchsize opts.nch];
 % Network design: Compress using block-wise DCTs with different block sizes
 net = CNN_Tensor_init('nch',opts.nch,'Imagesize', Imagesize, 'dctblsz', opts.dctblsz, 'MR', opts.MR);
 
-%% RGB or luminance
+%% Patch and channel size information to imdb
 
 imdb.opts.nch = opts.nch;
+imdb.opts.patchsize = opts.patchsize;
 
 %% Train
 
 opts.derOutputs = net.meta.derOutputs;
-[net, info] = cnn_train_dag(net, imdb, @getBatch, opts);
+trainopts = rmfield(opts,{'nch','MR','patchsize','dctblsz'}); % remove options related to the network structure
+
+[net, info] = cnn_train_dag(net, imdb, @getBatch, trainopts);
