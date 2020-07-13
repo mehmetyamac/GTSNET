@@ -34,4 +34,16 @@ imdb.images.set = [set_train set_val];
 
 %% Train
 
-[net, info] = CNN_Tensor_Train_dag(imdb);
+opts = struct();
+opts.expDir = 'train/CNN_Tensor_RDN';
+opts.batchSize = 32;
+opts.numSubBatches = 1;
+opts.learningRate = [logspace(-3,-3,50) logspace(-4,-4,30) logspace(-5,-5,20)];
+opts.numEpochs = numel(opts.learningRate);
+opts.weightDecay = 0.0001;
+opts.momentum = 0.5;
+opts.solver = @solver.adam; % []: SGD solver
+opts.gpus = [1]; % []: cpu
+opts.plotStatistics = true;
+
+[net, info] = CNN_Tensor_Train_dag(imdb,opts);

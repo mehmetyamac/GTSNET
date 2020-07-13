@@ -1,6 +1,6 @@
 function [net, info] = CNN_Tensor_Train_dag(imdb,varargin)
 
-%% Training options
+%% Training options (default), change from Main if needed
 
 opts = struct();
 opts.expDir = 'train/CNN_Tensor_RDN';
