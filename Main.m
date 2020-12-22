@@ -16,7 +16,7 @@ addpath('Tensor');
 patchsize = [256 256]; % Patch size
 nch = 1; % Number of channels
 MR = 0.1; % Measurement rate
-dctblsz = [8 16 32]; % DCT block size
+dctblsz = [8 16 32]; % DCT block size: [0 0 0], or [] means no DCT
 
 batchSize = 32; % Batch size
 netdir = 'train/CNN_Tensor_RDN'; % Network directory
