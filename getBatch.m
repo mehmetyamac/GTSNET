@@ -13,7 +13,7 @@ if imdb.opts.nch == 1
     images = images(:,:,1,:);
 end
 labels = images;
-if opts.numGpus > 0
+if imdb.opts.gpu
     images = gpuArray(images) ;
     labels = gpuArray(labels) ;
 end
