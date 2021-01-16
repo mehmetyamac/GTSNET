@@ -52,10 +52,19 @@ for i = 1:nscale
     if dctblsz(i) == 0 % No DCT
         % Tensor layer
         A = initialize_tensor(Asize);
+        
+        if opts.nch == 1 %grayscale
+            A{3} = single(1);
+        end
+        
         block = Tensor_3d('tensorsize',Asize, 'inittensor', A);
         name = ['CS_' num2str(i)];
         paramname = {['A1_' num2str(i)], ['A2_' num2str(i)], ['A3_' num2str(i)]};
         net.addLayer(name,block,'input',['Y_' num2str(i)],paramname);
+        
+        if opts.nch == 1 %grayscale
+            net.params(net.getParamIndex(['A3_' num2str(i)])).learningRate = 0;
+        end
         
         CSoutput{i} = ['Y_' num2str(i)];
         % Save it to use later
@@ -76,10 +85,19 @@ for i = 1:nscale
         
         % Tensor layer
         A = initialize_tensor(Asize);
+        
+        if opts.nch == 1 %grayscale
+            A{3} = single(1);
+        end
+        
         block = Tensor_3d('tensorsize',Asize, 'inittensor', A);
         name = ['CS_' num2str(dctblsz(i))];
         paramname = {['A1_' num2str(dctblsz(i))], ['A2_' num2str(dctblsz(i))], ['A3_' num2str(dctblsz(i))]};
         net.addLayer(name,block,outname,['Y_' num2str(dctblsz(i))],paramname);
+        
+        if opts.nch == 1 %grayscale
+            net.params(net.getParamIndex(['A3_' num2str(dctblsz(i))])).learningRate = 0;
+        end
         
         CSoutput{i} = ['Y_' num2str(dctblsz(i))];
         % Save it to use later
@@ -107,6 +125,11 @@ for i = 1:nscale
         outname = ['proximal_' num2str(i)];
         paramname = {['adjA1_' num2str(i)], ['adjA2_' num2str(i)], ['adjA3_' num2str(i)]};
         net.addLayer(name,block,'CS',outname,paramname);
+        
+        if opts.nch == 1 %grayscale
+            net.params(net.getParamIndex(['adjA3_' num2str(i)])).learningRate = 0;
+        end
+        
         adjCSoutput{i} = outname;
     else % DCT
         %adjoint layer
@@ -116,6 +139,10 @@ for i = 1:nscale
         outname = ['proximalDCT_' num2str(dctblsz(i))];
         paramname = {['adjA1_' num2str(dctblsz(i))], ['adjA2_' num2str(dctblsz(i))], ['adjA3_' num2str(dctblsz(i))]};
         net.addLayer(name,block,'CS',outname,paramname);
+        
+        if opts.nch == 1 %grayscale
+            net.params(net.getParamIndex(['adjA3_' num2str(dctblsz(i))])).learningRate = 0;
+        end
         
         %IDCT
         ID = cellfun(@(T) T', Dblocks{i}, 'UniformOutput', false);
