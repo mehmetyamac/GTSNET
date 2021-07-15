@@ -168,7 +168,7 @@ net = RDN_network(net,opts.nch,output,'prediction');
 %% Loss
 
 % Proximal loss
-net.addLayer('loss_proximal',dagnn.Loss('loss','l2','opts',{}),{'proximal','ground'},'cost_func_proximal')
+net.addLayer('loss_proximal',dagnn.Loss('loss','l1','opts',{}),{'proximal','ground'},'cost_func_proximal')
 
 % Prediction loss
 opts_loss = {'regularizer','gradient','alpha',0.005,'p',0.9};

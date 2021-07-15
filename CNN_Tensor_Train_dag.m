@@ -26,7 +26,8 @@ opts.momentum = 0.5;
 % Solver
 opts.solver = @solver.adam; % []: SGD solver
 opts.gpus = [1]; % []: cpu
-opts.plotStatistics = true;
+opts.plotStatistics = false;
+opts.parameterServer.method = 'tmove' ;
 
 opts = vl_argparse(opts, varargin);
 
